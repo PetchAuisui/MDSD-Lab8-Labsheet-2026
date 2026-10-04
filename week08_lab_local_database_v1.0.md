@@ -511,8 +511,11 @@ class SellItemPage extends StatefulWidget {
 <img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 03 58" src="https://github.com/user-attachments/assets/fb987030-9cc4-410d-9467-22262b11aa98" />
 
 2. กดยืนยันร่าง
+<img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 43 26" src="https://github.com/user-attachments/assets/f9f51164-ea4d-42c6-8dd2-a82a1990a583" />
+
 
 3. กดปุ่มไอคอนเข้าหน้า "ร่างประกาศของฉัน"
+<img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 43 32" src="https://github.com/user-attachments/assets/59c9ae3a-3407-4671-aa01-151d06e98c22" />
 
 
 4. ปิดแอปให้สนิทแล้วเปิดใหม่ กลับเข้าหน้า "ร่างประกาศของฉัน" อีกครั้ง
