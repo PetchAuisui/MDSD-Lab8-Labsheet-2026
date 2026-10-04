@@ -457,6 +457,10 @@ items: const [
 
 - (ค) ปิดแอปให้สนิท (Force Stop หรือปัดออกจาก Recent Apps) แล้วเปิดใหม่
 <img width="1206" height="2622" alt="Screenshot iPhone 17 04-10-2569 BE at 23 30 03" src="media/Screen Recording iPhone 17 04-10-2569 BE at 23.23.49.gif" />
+
+- (ง) กลับไปหน้า Home แล้วกดหัวใจซ้ำที่สินค้าชิ้นเดิมอีกครั้ง (ชิ้นที่ยังไม่ได้ลบ) แล้วตรวจสอบที่ Tab รายการโปรดว่ายังแสดงสินค้าชิ้นนั้นแค่แถวเดียว ไม่ซ้ำเป็น 2 แถว และแอปไม่ Error
+<img width="1206" height="2622" alt="Screenshot iPhone 17 04-10-2569 BE at 23 30 03" src="media/Screen Recording iPhone 17 05-10-2569 BE at 00.33.24.gif" />
+
 ---
 
 ## ส่วนที่ 5: นำร่างประกาศขายสินค้า (สัปดาห์ที่ 7) มาบันทึกถาวร
@@ -507,8 +511,9 @@ class SellItemPage extends StatefulWidget {
 <img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 03 58" src="https://github.com/user-attachments/assets/fb987030-9cc4-410d-9467-22262b11aa98" />
 
 2. กดยืนยันร่าง
+
 3. กดปุ่มไอคอนเข้าหน้า "ร่างประกาศของฉัน"
-<img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 04 03" src="https://github.com/user-attachments/assets/8522af51-c3c4-481a-a469-a5ad9c593157" />
+
 
 4. ปิดแอปให้สนิทแล้วเปิดใหม่ กลับเข้าหน้า "ร่างประกาศของฉัน" อีกครั้ง
 <img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 03 58" src="media/Screen Recording iPhone 17 05-10-2569 BE at 00.04.25.gif" />
