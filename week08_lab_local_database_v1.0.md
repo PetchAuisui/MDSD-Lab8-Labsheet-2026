@@ -505,10 +505,14 @@ class SellItemPage extends StatefulWidget {
 
 1. สร้างร่างประกาศใหม่ผ่าน Tab "ลงประกาศขาย"
 <img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 03 58" src="https://github.com/user-attachments/assets/fb987030-9cc4-410d-9467-22262b11aa98" />
-2. กดยืนยันร่าง + 3. กดปุ่มไอคอนเข้าหน้า "ร่างประกาศของฉัน"
+
+2. กดยืนยันร่าง
+3. กดปุ่มไอคอนเข้าหน้า "ร่างประกาศของฉัน"
 <img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 04 03" src="https://github.com/user-attachments/assets/8522af51-c3c4-481a-a469-a5ad9c593157" />
+
 4. ปิดแอปให้สนิทแล้วเปิดใหม่ กลับเข้าหน้า "ร่างประกาศของฉัน" อีกครั้ง
 <img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 03 58" src="media/Screen Recording iPhone 17 05-10-2569 BE at 00.04.25.gif" />
+
 ---
 
 ## ส่วนที่ 6: ทดสอบสถานการณ์ Offline-first
