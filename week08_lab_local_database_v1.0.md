@@ -53,10 +53,149 @@
 ของแต่ละคอลัมน์ และเหตุผลว่าทำไมเลือกชนิดข้อมูลนั้น
 ```
 
-บันทึกโค้ดที่ Gemini ตอบกลับมาที่ด้านล่าง
+**บันทึกโค้ดที่ Gemini ตอบกลับมาที่ด้านล่าง**
 
-```text
-บันทึกผลลัพธ์ที่นี่
+1. ตาราง FavoriteProducts (สินค้าที่กดถูกใจ)
+```dart
+import 'package:drift/drift.dart';
+
+/// ตารางเก็บสินค้าที่ผู้ใช้กดถูกใจ (Favorites / Liked Products)
+/// ออกแบบมาเพื่อแคชข้อมูลไว้แสดงในหน้ารายการโปรดได้ทันทีแบบออฟไลน์
+class FavoriteProducts extends Table {
+  /// รหัสสินค้าจาก Backend/API (เป็นตัวเลข)
+  /// ใช้เป็น Primary Key เพื่อป้องกันการกดถูกใจซ้ำ และค้นหาได้รวดเร็วระดับ O(1)
+  IntColumn get productId => integer()();
+
+  /// ชื่อสินค้า แคชไว้แสดงผลทันทีโดยไม่ต้องยิง API
+  TextColumn get title => text().withLength(min: 1, max: 255)();
+
+  /// ราคาสินค้า ณ ตอนที่กดถูกใจ
+  /// RealColumn: เหมาะกับราคาสินค้าทั่วไปที่มีเศษสตางค์ เช่น 149.50
+  RealColumn get price => real()();
+
+  /// URL รูปภาพหลักของสินค้า สำหรับโหลดรูปแสดงใน List/Grid
+  TextColumn get imageUrl => text()();
+
+  /// เวลาที่ผู้ใช้กดถูกใจ ใช้ในการเรียงลำดับจากล่าสุดไปเก่าสุด
+  /// กำหนด default เป็นเวลาปัจจุบัน ณ ตอนที่ Insert
+  DateTimeColumn get likedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  Set<Column> get primaryKey => {productId};
+}
+```
+2. ตาราง AiListingDrafts (ร่างประกาศขายสินค้าที่ AI แนะนำ)
+```dart
+import 'package:drift/drift.dart';
+
+/// ตารางเก็บแบบร่างประกาศขายสินค้าที่ AI แนะนำจากรูปถ่าย
+/// แก้ปัญหาระบบ State หายเมื่อปิดแอป เพื่อให้ผู้ใช้กลับมาแก้ไขหรือโพสต์ต่อได้
+class AiListingDrafts extends Table {
+  /// รหัส Draft ภายในเครื่องแบบ Auto Increment
+  IntColumn get id => integer().autoIncrement()();
+
+  /// หัวข้อประกาศที่ AI สร้างให้ หรือผู้ใช้พิมพ์ไว้ (อาจเป็น null หาก AI กำลังวิเคราะห์)
+  TextColumn get title => text().nullable()();
+
+  /// หมวดหมู่สินค้า เช่น 'อุปกรณ์การเรียน', 'อิเล็กทรอนิกส์'
+  TextColumn get category => text().nullable()();
+
+  /// คำอธิบายรายละเอียดสินค้าที่ AI สร้างให้
+  TextColumn get description => text().nullable()();
+
+  /// Path ไฟล์รูปภาพที่เก็บไว้ในเครื่องของผู้ใช้ (Local File Storage)
+  /// เช่น '/data/user/0/com.campus.marketplace/app_flutter/draft_1.jpg'
+  TextColumn get localImagePath => text()();
+
+  /// ราคาที่ AI แนะนำเบื้องต้น (ใส่หรือไม่ใส่ก็ได้)
+  RealColumn get suggestedPrice => real().nullable()();
+
+  /// เวลาที่บันทึกหรือแก้ไขล่าสุด เพื่อเรียงร่างล่าสุดขึ้นมาแสดงก่อน
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  /// เวลาที่สร้างร่างนี้ครั้งแรก
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+}
+```
+- การเชื่อมต่อฐานข้อมูล & คำสั่ง CRUD/Streams สำหรับ Flutter
+```dart
+import 'dart:io';
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+
+// รวมตารางทั้งสองเข้าด้วยกัน
+part 'app_database.g.dart';
+
+@DriftDatabase(tables: [FavoriteProducts, AiListingDrafts])
+class AppDatabase extends _$AppDatabase {
+  AppDatabase() : super(_openConnection());
+
+  @override
+  int get schemaVersion => 1;
+
+  // -------------------------------------------------------------
+  // Queries สำหรับ FavoriteProducts (สินค้าที่กดถูกใจ)
+  // -------------------------------------------------------------
+
+  /// ดึงรายการสินค้าที่ถูกใจ เรียงจาก "ถูกใจล่าสุด" (likedAt DESC)
+  /// ส่งออกเป็น Stream เพื่อให้อัปเดต UI ใน Flutter แบบ Reactive อัตโนมัติ
+  Stream<List<FavoriteProduct>> watchRecentFavorites() {
+    return (select(favoriteProducts)
+          ..orderBy([(t) => OrderingTerm.desc(t.likedAt)]))
+        .watch();
+  }
+
+  /// เพิ่มหรืออัปเดตเวลาที่ถูกใจ (Upsert)
+  Future<void> likeProduct(FavoriteProductsCompanion item) {
+    return into(favoriteProducts).insertOnConflictUpdate(item);
+  }
+
+  /// ยกเลิกการถูกใจ (ลบตาม productId)
+  Future<int> removeFavorite(int productId) {
+    return (delete(favoriteProducts)..where((t) => t.productId.equals(productId))).go();
+  }
+
+  /// ตรวจสอบว่าสินค้าชิ้นนี้ถูกใจไว้แล้วหรือไม่
+  Future<bool> isProductLiked(int productId) async {
+    final query = select(favoriteProducts)..where((t) => t.productId.equals(productId));
+    final result = await query.getSingleOrNull();
+    return result != null;
+  }
+
+  // -------------------------------------------------------------
+  // Queries สำหรับ AiListingDrafts (ร่างประกาศขายสินค้าจาก AI)
+  // -------------------------------------------------------------
+
+  /// ดึงร่างประกาศทั้งหมด เรียงจากร่างที่ "แก้ไขล่าสุด" (updatedAt DESC)
+  Stream<List<AiListingDraft>> watchRecentDrafts() {
+    return (select(aiListingDrafts)
+          ..orderBy([(t) => OrderingTerm.desc(t.updatedAt)]))
+        .watch();
+  }
+
+  /// บันทึกหรือสร้างร่างประกาศใหม่ (อัปเดต updatedAt เสมอ)
+  Future<int> saveOrUpdateDraft(AiListingDraftsCompanion draft) {
+    final withUpdatedTime = draft.copyWith(
+      updatedAt: Value(DateTime.now()),
+    );
+    return into(aiListingDrafts).insertOnConflictUpdate(withUpdatedTime);
+  }
+
+  /// ลบร่างประกาศเมื่อโพสต์ขายสำเร็จ หรือเมื่อผู้ใช้กดทิ้งร่าง
+  Future<int> deleteDraft(int draftId) {
+    return (delete(aiListingDrafts)..where((t) => t.id.equals(draftId))).go();
+  }
+}
+
+LazyDatabase _openConnection() {
+  return LazyDatabase(() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'campus_marketplace.sqlite'));
+    return NativeDatabase.createInBackground(file);
+  });
+}
 ```
 
 
