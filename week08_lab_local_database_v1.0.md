@@ -456,7 +456,7 @@ items: const [
 <img width="1206" height="2622" alt="Screenshot iPhone 17 04-10-2569 BE at 23 30 03" src="https://github.com/user-attachments/assets/466e4995-579c-4ae4-8a62-be8091d421f9" />
 
 - (ค) ปิดแอปให้สนิท (Force Stop หรือปัดออกจาก Recent Apps) แล้วเปิดใหม่
-
+<img width="1206" height="2622" alt="Screenshot iPhone 17 04-10-2569 BE at 23 30 03" src="media/Screen Recording iPhone 17 04-10-2569 BE at 23.23.49.gif" />
 ---
 
 ## ส่วนที่ 5: นำร่างประกาศขายสินค้า (สัปดาห์ที่ 7) มาบันทึกถาวร
