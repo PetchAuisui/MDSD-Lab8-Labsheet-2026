@@ -519,9 +519,10 @@ class SellItemPage extends StatefulWidget {
 
 > ✅ **Checkpoint 6.1** ถ่ายภาพหน้าจอที่แสดงให้เห็นว่า Tab รายการโปรดและหน้าร่างประกาศยังคงแสดงข้อมูลได้ตามปกติแม้ไม่มีอินเทอร์เน็ตเลย (ส่วน Tab หน้าหลักที่ดึงจาก Fake Store API คาดว่าจะแสดง Error ตามปกติ เพราะยังไม่ได้ทำ Local Cache ให้หน้านั้น) 
 
-```text
-บันทึกผลลัพธ์ที่นี่
-```
+<img width="1206" height="2622" alt="Screenshot iPhone 17 05-10-2569 BE at 00 03 58" src="media/Screen Recording iPhone 17 05-10-2569 BE at 00.18.00.gif" />
+
+**หมายเหตุสำหรับการทดสอบบน iOS Simulator:**
+> เนื่องจาก iOS Simulator ไม่รองรับการเปิดโหมดเครื่องบิน (Airplane Mode) หรือการปิด Wi-Fi จากภายในตัวจำลองเครื่องโดยตรง การทดสอบสถานการณ์ Offline-first ในข้อนี้จึงใช้วิธี **"ปิด Wi-Fi บนเครื่อง Mac"** ชั่วคราวแทน เพื่อตัดการเชื่อมต่ออินเทอร์เน็ตของตัว Simulator
 
 ---
 
